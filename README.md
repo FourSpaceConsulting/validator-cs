@@ -1,4 +1,4 @@
-# `toolbox-cs`
+# `validator-cs`
 > C# Validation library
 
 ## Features
