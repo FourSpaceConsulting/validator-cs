@@ -42,7 +42,7 @@ namespace Fourspace.Validator.Validators
 
         protected override bool IsValidationFailure(decimal? value)
         {
-            return value == null ? true : !decimal.Equals(value.Value, decimal.Round(value.Value, precision));
+            return value == null || !decimal.Equals(value.Value, decimal.Round(value.Value, precision));
         }
     }
 }

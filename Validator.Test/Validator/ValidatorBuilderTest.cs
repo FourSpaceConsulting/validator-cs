@@ -32,7 +32,7 @@ namespace Validator.Test.Validator
     [TestFixture]
     public class ValidatorBuilderTest
     {
-        private class ValidatorTest
+        private class TestObject
         {
             public string Item1 { get; set; }
             public int Item2 { get; set; }
@@ -44,18 +44,18 @@ namespace Validator.Test.Validator
         [Test]
         public void TestPropertyBuilderValidator()
         {
-            var validator = ValidatorBuilder.Builder<ValidatorTest>()
-                .Append("Random",new EqualityValidator<ValidatorTest, int>(o => o.Item2, o => o.Item4, true))
+            var validator = ValidatorBuilder.Builder<TestObject>()
+                .Append("Random",new EqualityValidator<TestObject, int>(o => o.Item2, o => o.Item4, true))
                 .BeginGroup("Item1")
                     .Append(o => o.Item1, NotWhitespaceString.NotNullInstance, new StringLength(i => i<5))
-                    .Append(new EqualityValidator<ValidatorTest>(new ValidatorTest(), true))
-                    .Append(new EqualityValidator<ValidatorTest, int>(o => o.Item2, o => o.Item4, true))
+                    .Append(new EqualityValidator<TestObject>(new TestObject(), true))
+                    .Append(new EqualityValidator<TestObject, int>(o => o.Item2, o => o.Item4, true))
                 .EndGroup()
                 .Append("Item2", o => o.Item2, new RangeValidator<int>(0,2))
                 .Append("Item3", o => o.Item3, new CollectionValidator<decimal?>(new RangeValidator<decimal?>(0, 2, false)))
                 .Append("Item4", o => o.Item4, new EqualityValidator<int>(6,true))
                 .Build();
-            var result = validator.Validate("Test",new ValidatorTest() { Item1 = "HELLO ME", Item2 = -1, Item3 = new List<decimal?>() { 1m, 2.5m, null } });
+            var result = validator.Validate("Test",new TestObject() { Item1 = "HELLO ME", Item2 = -1, Item3 = new List<decimal?>() { 1m, 2.5m, null } });
             Console.WriteLine(result);
             Assert.AreEqual(false, result.Valid);
         }
